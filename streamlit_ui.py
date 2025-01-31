@@ -1,5 +1,4 @@
 import streamlit as st
-import toml
 from transformers import AutoTokenizer, AutoModel
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import AstraDB
@@ -8,24 +7,22 @@ from langchain.memory import ConversationBufferMemory
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
 
-# Load secret configuration from secret.toml
-config = toml.load("secret.toml")
-
-# Groq configuration
-groq_api_key = config["groq"]["api_key"]
-groq_model_name = config["groq"]["model_name"]
+# Access secret configuration directly from Streamlit secrets
+groq_api_key = st.secrets["groq"]["api_key"]
+groq_model_name = st.secrets["groq"]["model_name"]
 llm = ChatGroq(temperature=0.6, groq_api_key=groq_api_key, model_name=groq_model_name)
 
 # HuggingFace model and tokenizer
-tokenizer = AutoTokenizer.from_pretrained(config["huggingface"]["model_name"])
-model = AutoModel.from_pretrained(config["huggingface"]["model_name"])
+huggingface_model_name = st.secrets["huggingface"]["model_name"]
+tokenizer = AutoTokenizer.from_pretrained(huggingface_model_name)
+model = AutoModel.from_pretrained(huggingface_model_name)
 
 # Create HuggingFaceEmbeddings instance
-embedding_model = HuggingFaceEmbeddings(model_name=config["huggingface"]["model_name"])
+embedding_model = HuggingFaceEmbeddings(model_name=huggingface_model_name)
 
 # AstraDB configuration
-api_endpoint = config["astras"]["api_endpoint"]
-token = config["astras"]["token"]
+api_endpoint = st.secrets["astras"]["api_endpoint"]
+token = st.secrets["astras"]["token"]
 vstore = AstraDB(
     embedding=embedding_model,
     collection_name="synthetic_data",

@@ -77,10 +77,9 @@ if prompt:
 
     You are a knowledgeable customer service for product JetStream smart hair dryer. Based on question and chat history, create ONLY ONE sentence of what the query needed to vector search the information
     """
-    pre_invoke = llm.invoke(pre_invoke_prompt)
-    pre_invoke = pre_invoke.content
-    retriever = vstore.as_retriever()
-    print(retriever.get_relevant_documents(pre_invoke))
+    # pre_invoke = llm.invoke(pre_invoke_prompt)
+    # pre_invoke = pre_invoke.content
+    # retriever = vstore.as_retriever()
     st.session_state["messages"].append({"role": "user", "content": prompt})
     
     with st.chat_message("user"):
@@ -88,7 +87,7 @@ if prompt:
     
     # Get AI response using RAG with memory
     response = qa_chain.run({
-        "question": pre_invoke,
+        "question": prompt,
         "chat_history": memory.load_memory_variables({}),
     })    
     st.session_state["messages"].append({"role": "assistant", "content": response})

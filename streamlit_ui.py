@@ -56,7 +56,7 @@ qa_chain = ConversationalRetrievalChain.from_llm(
 )
 
 # Streamlit UI
-st.title("Chatbot UI with Conversational Memory RAG")
+st.title("JetStream Smart Hairdryer AI Customer Support")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = []

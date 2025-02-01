@@ -20,12 +20,16 @@ model = AutoModel.from_pretrained(huggingface_model_name)
 # Create HuggingFaceEmbeddings instance
 embedding_model = HuggingFaceEmbeddings(model_name=huggingface_model_name)
 
+# UI for selecting data source
+data_source = st.radio("Select Data Source:", ("PDF", "CSV"))
+
 # AstraDB configuration
 api_endpoint = st.secrets["astras"]["api_endpoint"]
 token = st.secrets["astras"]["token"]
+collection_name = "synthetic_data" if data_source == "PDF" else "synthetic_data_csv"
 vstore = AstraDB(
     embedding=embedding_model,
-    collection_name="synthetic_data",
+    collection_name=collection_name,
     api_endpoint=api_endpoint,
     token=token,
 )
@@ -39,7 +43,9 @@ for msg in st.session_state["chat_history"]:
     memory.save_context({"input": msg["user"]}, {"output": msg["assistant"]})
 
 # Define system prompt
-system_prompt = """You are a knowledgeable customer service for product JetStream smart hair dryer. Use the retrieved documents to provide strict, accurate, and relevant answers. If no relevant information is found, say you don't know rather than making up facts."""
+system_prompt = """You are a knowledgeable customer service for product JetStream smart hair dryer. 
+Use the retrieved documents to provide strict, accurate, and relevant answers. 
+If no relevant information is found, say you don't know rather than making up facts."""
 
 # Create a custom prompt template
 prompt_template = ChatPromptTemplate.from_messages([
@@ -69,17 +75,6 @@ for message in st.session_state["messages"]:
 # User input
 prompt = st.chat_input("Type your message...")
 if prompt:
-    pre_invoke_prompt = f"""
-    this is the chat history:
-    {st.session_state["messages"]}
-
-    this is the question: {prompt}
-
-    You are a knowledgeable customer service for product JetStream smart hair dryer. Based on question and chat history, create ONLY ONE sentence of what the query needed to vector search the information
-    """
-    # pre_invoke = llm.invoke(pre_invoke_prompt)
-    # pre_invoke = pre_invoke.content
-    # retriever = vstore.as_retriever()
     st.session_state["messages"].append({"role": "user", "content": prompt})
     
     with st.chat_message("user"):

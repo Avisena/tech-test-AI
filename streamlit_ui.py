@@ -96,7 +96,7 @@ if prompt:
     docs_content = [doc.page_content for doc in top_docs]
 
     # Prompt sistem dalam bahasa Indonesia
-    system_prompt = """Anda adalah layanan pelanggan yang sangat berpengetahuan tentang produk JetStream smart hair dryer.
+    system_prompt = """Anda adalah layanan pelanggan yang sangat berpengetahuan tentang produk JetStream smart hair dryer. JAWAB DALAM BAHASA INDONESIA.
     Gunakan dokumen yang diambil untuk memberikan jawaban yang ketat, akurat, dan relevan.
     Jika tidak ada informasi yang relevan ditemukan, katakan bahwa Anda tidak tahu daripada mengarang jawaban."""
 

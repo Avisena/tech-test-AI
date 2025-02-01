@@ -7,6 +7,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import AstraDB
 from langchain_groq import ChatGroq
 
+st.title("💨 Layanan Pengguna AI JetStream Smart Hairdryer")
 # Load BM25 index from file
 def load_bm25_index(input_file: str) -> BM25Okapi:
     """Memuat indeks BM25 dari file."""

@@ -108,7 +108,7 @@ if prompt:
 
     # AI response generation (using Groq model)
     response = llm.invoke(final_prompt)  # Pass the final_prompt
-
+    response = response.content
     # Add assistant's response to chat history
     st.session_state["messages"].append({"role": "assistant", "content": response})
 

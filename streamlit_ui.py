@@ -107,7 +107,7 @@ if prompt:
     final_prompt = f"{system_prompt}\n\nUser Query: {prompt}\n\nContext:\n{context}"
 
     # AI response generation (using Groq model)
-    response = llm.run({"question": final_prompt})  # Pass the final_prompt
+    response = llm.invoke(final_prompt)  # Pass the final_prompt
 
     # Add assistant's response to chat history
     st.session_state["messages"].append({"role": "assistant", "content": response})
